@@ -21,3 +21,7 @@ exports.getOpenWeatherApi = () => {
 exports.getRestApi = () => {
     return properties.get("REST_API");
 };
+
+exports.getEmptyLocationString = () => {
+    return properties.get("EMPTY_LOCATION");
+}

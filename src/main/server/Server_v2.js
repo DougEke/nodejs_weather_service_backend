@@ -6,29 +6,24 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
-const controller = require('../controller/Controller');
 const propertiesReader = require('../utilities/PropertiesReader');
 const utilities = require('../utilities/utilities');
+const weatherRouter = require(`../router/weatherRouter`)(server);
 
 // Configuration section
-const port = propertiesReader.getPort();
+const port = propertiesReader.getPort();    // 8000
 const hostName = propertiesReader.getServerUrl();
 
 // Start the server.use.apply.
-server.listen(8000, () => {
-    console.log(`\n[${utilities.getDateTime()}] NodeJs service server running on http://${hostName}:${port}\n`)
+server.listen(port, () => {
+    console.log(`\n[${utilities.getDateTime()}] NodeJs service server running on http://${hostName}:${port}\n`);
 });
 
-server.get(`/weather/`, async (req, res) => {
-    let data = await controller.getCurrentWeatherDataFromApi("Kirkby on Bain");
+server.use(weatherRouter);
 
-    console.log(`\n===> Debug [server.get()] data: ${JSON.stringify(data)}\n`);
-
-    res.json({data});
-
-    // return res.json(await controller.getCurrentWeatherDataFromApi(`Lincoln`));
-});
-
+/***
+ * ToDo: This is something for the future...
+ */
 // cron.schedule(`*/10 * * * * *`, () => {
 //     console.log(`\nScheduled task running at: ${utilities.getDateTime()}`);
 // });
